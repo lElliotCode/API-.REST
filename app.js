@@ -1,19 +1,34 @@
 const express = require('express')
 const crypto = require('node:crypto')
 const movies = require('./movies.json')
+const cors = require('cors')
 
+const PORT = process.env.PORT ?? 1234
 const { validateMovie, validatePartialMovie } = require('./schemas/movies')
 const app = express()
-const PORT = process.env.PORT ?? 1234
-
-const ACCEPTED_ORIGINS = [
-  'http://localhost:8080',
-  'http://localhost:3000',
-  'http://localhost:1234'
-]
 
 app.use(express.json())
 app.disable('x-powered-by') // ---> Deshabilitar el header X-Powered-By: Express
+app.use(cors({
+  origin: (origin, cb) => {
+    const ACCEPTED_ORIGINS = [
+      'http://localhost:8080',
+      'http://localhost:3000',
+      'http://localhost:1234'
+    ]
+
+    if (ACCEPTED_ORIGINS.includes(origin)) {
+      return cb(null, true)
+    }
+
+    if (!origin) {
+      return cb(null, true)
+    }
+
+    return cb(new Error('Not allowed by CORS'))
+  }
+
+}))
 
 app.get('/', (req, res) => {
   console.log(req.url)
@@ -24,9 +39,7 @@ app.get('/', (req, res) => {
 app.get('/movies', (req, res) => {
   const origin = req.header('origin')
 
-  if (ACCEPTED_ORIGINS.includes(origin) || !origin) {
-    res.header('Access-Control-Allow-Origin', origin)
-  }
+  
 
   const { genre } = req.query
   if (genre) {
