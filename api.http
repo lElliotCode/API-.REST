@@ -1,0 +1,45 @@
+### Recuperar todas las peliculas
+
+GET http://localhost:1234/movies 
+
+### Recuperar peliculas por su ID
+
+GET http://localhost:1234/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+
+### Recuperar todas las peliculas por género (entidad o concepto)
+
+// GET http://localhost:1234/movies/genre/1
+
+### Recuperar todas las peliculas por género (queryparams)
+
+GET http://localhost:1234/movies?genre=turbias
+
+
+### Crear o agregar una nueva pelicula con POST
+
+POST http://localhost:1234/movies
+Content-Type: application/json 
+
+{
+  "id": "dcdd0fad-a94c-4810-8acc-4f108d3b18c2",
+  "title": "Interstellar",
+  "year": 2014,
+  "director": "Cristopher Nolan",
+  "duration": 135,
+  "poster": "https://m.media-amazon.com/images/I/71thymE6lwL._AC_UF894,1000_QL80_.jpg",
+  "genre": [
+  "Drama",
+  "Action",
+  "Sci-Fi"
+  ],
+  "rate": 9.8
+}
+
+### Actualizar una pelicula 
+
+PATCH http://localhost:1234/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
+Content-Type: application/json
+
+{
+  "title": "The Shawshank Redemption"
+}
